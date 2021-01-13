@@ -4,7 +4,7 @@ const scorePage = document.getElementById('score-page');
 const splashPage = document.getElementById('splash-page');
 const countdownPage = document.getElementById('countdown-page');
 // Splash Page
-const startForm = document.getElementById('start-form');
+const startForm = document.getElementById('start');
 const radioContainers = document.querySelectorAll('.radio-container');
 const radioInputs = document.querySelectorAll('input');
 const bestScores = document.querySelectorAll('.best-score-value');
@@ -19,7 +19,7 @@ const penaltyTimeEl = document.querySelector('.penalty-time');
 const playAgainBtn = document.querySelector('.play-again');
 
 // Equations
-
+let questionAmount = 0;
 let equationsArray = [];
 
 // Game Page
@@ -82,3 +82,62 @@ function createEquations() {
 //   bottomSpacer.classList.add('height-500');
 //   itemContainer.appendChild(bottomSpacer);
 // }
+
+
+//Display countdown
+function countdownStart() {
+  countdown.textContent = '3';
+  setTimeout(() => {
+    countdown.textContent = '2';
+  }, 1000);
+  setTimeout(() => {
+    countdown.textContent = '1';
+  }, 2000);
+  setTimeout(() => {
+    countdown.textContent = 'GO!';
+  }, 3000);
+}
+
+//Navigate from splash page to countdown page
+function showCountdown() {
+  splashPage.hidden = true;
+  countdownPage.hidden = false;
+  countdownStart();
+}
+
+
+
+//Get the value from selected radio button
+function getRadioValue() {
+  let radioValue;
+  radioInputs.forEach((radioInput) => {
+    if (radioInput.checked) {
+      radioValue = radioInput.value;
+    }
+  });
+  return radioValue;
+}
+
+//Form that decides number of questions
+function selectQuestionAmount(e) {
+  e.preventDefault();
+  questionAmount = getRadioValue()
+  console.log('question amount:', questionAmount);
+  if (questionAmount) {
+    showCountdown();
+  }
+}
+
+startForm.addEventListener('click', () => {
+  radioContainers.forEach((radioEl) => {
+    //Reset Selected Label Styling
+    radioEl.classList.remove('selected-label');
+    //Add it back if the radio input is checked
+    if (radioEl.children[1].checked) {
+      radioEl.classList.add('selected-label');
+    }
+  });
+});
+
+
+startForm.addEventListener('submit', selectQuestionAmount);
